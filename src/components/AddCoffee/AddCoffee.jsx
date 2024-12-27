@@ -1,4 +1,4 @@
-
+import Swal from 'sweetalert2'
 
 const AddCoffee = () => {
 
@@ -13,13 +13,40 @@ const AddCoffee = () => {
         const details = form.details.value;
         const photo = form.photo.value;
 
-        const newCoffee = {name, supplier, category, chef, taste, details, photo};
+        const newCoffee = { name, supplier, category, chef, taste, details, photo };
         console.log(newCoffee);
+
+
+        
+
+        // send the newCoffee data to the server
+
+        fetch('http://localhost:5000/coffee', {
+
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newCoffee)
+
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                if(data.insertedId){
+                    Swal.fire({
+                        title: 'Success',
+                        text: 'Coffee Added Successfully',
+                        icon: 'success',
+                        confirmButtonText: 'Cool'
+                    })
+                }
+            })
 
     }
 
     return (
-        <div className="p-6 bg-[#EFEBDF]">
+        <div className="h-screen p-6 bg-[#EFEBDF]">
             <h2 className="text-2xl font-bold mb-4 text-center">Add a Coffee</h2>
 
             <form onSubmit={handleAddCoffee} className='p-6 rounded-lg'>
@@ -71,7 +98,7 @@ const AddCoffee = () => {
 
                 {/* Submit Button */}
                 <div className="mt-6">
-                    <button type="submit" className="bg-[#D2B48C] font-bold p-2 rounded-lg w-full block">Add Coffee</button>
+                    <button type="submit" className="btn btn-warning font-bold p-2 rounded-lg w-full block">Add Coffee</button>
                 </div>
             </form>
         </div>
